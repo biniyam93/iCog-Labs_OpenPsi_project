@@ -4,7 +4,7 @@
 (= (ActivationModulatorUpdater)
    (let* (($competence (get-truth-value-mean ( CompetenceDemandGoal)))
          ($energy (get-truth-value-mean (EnergyDemandGoal)))
-         ($stimulus (get-predicate-truth-value-mean "ActivationStimulus")))
+         ($stimulus (get-predicate-truth-value-mean (ActivationStimulus))))
    (+ (* 2 $stimulus)
       (* (/ $competence (+ $competence 0.5))
          (/ $energy (+ 0.05 $energy))))))
@@ -14,10 +14,10 @@
 (: ResolutionModulatorUpdater (-> Number))
 
 (= (ResolutionModulatorUpdater)
-   (let* (($stimulus (get-predicate-truth-value-mean "ResolutionStimulus")))
+   (let $stimulus (get-predicate-truth-value-mean(ResolutionStimulus))
      (+ (* 2 $stimulus)
         (- 1
-           ((py-atom math.pow) (get-predicate-truth-value-mean "ActivationModulator") 0.5)))))
+           ((py-atom math.pow) (get-predicate-truth-value-mean (ActivationModulator)) 0.5)))))
 
 
 ;; Securing Threshold Modulator Updater in MeTTa
@@ -26,7 +26,7 @@
 (= (SecuringThresholdModulatorUpdater)
    (let* (($certainty (get-truth-value-mean (CertaintyDemandGoal)))
         ($integrity (get-truth-value-mean (IntegrityDemandGoal)))
-        ($stimulus (get-predicate-truth-value-mean "SecuringThresholdStimulus")))
+        ($stimulus (get-predicate-truth-value-mean (SecuringThresholdStimulus))))
    (+ (* 2 $stimulus)
       ((py-atom math.pow) $integrity 3))))
 
@@ -35,8 +35,8 @@
 (: SelectionThresholdModulatorUpdater (-> Number))
 
 (= (SelectionThresholdModulatorUpdater)
-   (let* (($competence (get-truth-value-mean (c CompetenceDemandGoal)))
-         ($stimulus (get-predicate-truth-value-mean "SelectionThresholdStimulus")))
+   (let* (($competence (get-truth-value-mean (CompetenceDemandGoal)))
+         ($stimulus (get-predicate-truth-value-mean (SelectionThresholdStimulus))))
      (+ (* 2 $stimulus)
         (fuzzy-equal $competence 1 15))))
 
