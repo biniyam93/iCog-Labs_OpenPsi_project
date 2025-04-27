@@ -22,7 +22,6 @@
 
 ;; Securing Threshold Modulator Updater in MeTTa
 (: SecuringThresholdModulatorUpdater (-> Number))
-
 (= (SecuringThresholdModulatorUpdater)
    (let* (($certainty (get-truth-value-mean (CertaintyDemandGoal)))
         ($integrity (get-truth-value-mean (IntegrityDemandGoal)))
