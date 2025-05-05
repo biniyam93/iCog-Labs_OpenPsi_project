@@ -1,38 +1,23 @@
-(=(EnergyDemandUpdater $energy) (
-    (get_latest_predicate_truth_value_mean ($energy)) 
-))
+;ti is the latest time stamp of observing object i 
+;ts is the current time stamp of the virtual world.
 
-(= (WaterDemandUpdater $thirst)(
-    (- 1 $thirst)) 
-    ) 
-
-
-(=(IntegrityDemandUpdater )((get_latest_predicate_truth_value_mean ($fitness)))
-
-
-(=(fuzzy_new $ts $ti )(
-    (/ 2 (+ 1 ((py-atom math.exp)(* 0.002(- $ts $ti)))))
-))
+;(=(fuzzy_new $ts $ti )(
+    ;(/ 2 (+ 1 ((py-atom math.exp)(* 0.002(- $ts $ti)))))
+;))
 
 ;Function from ben paper 
-(= (update_certainty $ts $ti $object_num)
-(let $uniRand ((py-atom numpy.random.uniform) 0 1)
-   (/
-    (+ (/ 2 (+ 1 ((py-atom math.exp)(* 0.002(- $ts $ti)))))
-       $uniRand )
-    (* (+ 1 ((py-atom math.exp) (* (- 0 0.05) $object_num)))
-       (+ 1 $object_num))
-   )
-))
 
-(= (competence $success_count $failure_count)
-    (/ $success_count
-       (+ $success_count
-          ((py-atom math.pow) $failure_count (/ 3 2))
-       )
-    ))
+;(= (certaint_level $ts $ti $object_num)
+;(let $uniRand ((py-atom numpy.random.uniform) 0 1)
+;  (/
+;  (+ (/ 2 (+ 1 ((py-atom math.exp)(* 0.002(- $ts $ti)))))
+;    $uniRand )
+;(* (+ 1 ((py-atom math.exp) (* (- 0 0.05) $object_num)))
+;  (+ 1 $object_num))
+;)
+;))
 
-; function from experement 
+; function from embodiment 
 
 (=(competence_demand_updater $done_list $failed_list)
     (let* (($uniRand_done ((py-atom numpy.random.uniform) 0 2))
@@ -43,5 +28,17 @@
         (/ $done (+ $done ((py-atom math.pow) $fail (/ 3 2))))
     )))
 
-!(fuzzy_new 4 2 )
-!(update_certainty 100 90 5)
+(=(certainty_demand_updater)
+(let* (($changes_with_tv (match &demandspace (changes_with_tv $x ) $x))
+      ($changes_with_arg (match &demandspace (changes_with_arg $x ) $x))
+      ($change_with_tv_level  0)
+      ($change_with_arg_level  0)
+      ($len_tv (len($changes_with_tv)))
+      ($random_noise_tv (+ $len_tv  (* 20  ((py-atom numpy.random.uniform) 0 1))))
+      ($random_noise_tv_2 (+ $len_tv (* 20  ((py-atom numpy.random.uniform) 0 1)))))
+      
+   (/ 1 (+ 1 (* 0.001 (* $random_noise_tv $random_noise_tv_2))))
+
+))
+
+
